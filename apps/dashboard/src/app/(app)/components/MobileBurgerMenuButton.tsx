@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  ChevronDownIcon,
+  ChevronUpIcon,
   LogOutIcon,
   MenuIcon,
   MoonIcon,
@@ -36,6 +38,8 @@ export function MobileBurgerMenuButton(
       },
 ) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showFeedbackSection, setShowFeedbackSection] = useState(false);
+  const [modalFeedback, setModalFeedback] = useState("");
   const { setTheme, theme } = useTheme();
   const ensQuery = useEns({
     addressOrEnsName:
@@ -43,6 +47,17 @@ export function MobileBurgerMenuButton(
     client: props.client,
   });
   // const [isCMDSearchModalOpen, setIsCMDSearchModalOpen] = useState(false);
+
+  const handleModalSubmit = () => {
+    console.log("Modal feedback sent:", modalFeedback);
+    setModalFeedback("");
+    setShowFeedbackSection(false);
+  };
+
+  const handleModalCancel = () => {
+    setModalFeedback("");
+    setShowFeedbackSection(false);
+  };
 
   useLayoutEffect(() => {
     if (isMenuOpen) {
@@ -71,7 +86,7 @@ export function MobileBurgerMenuButton(
       </Button>
 
       {isMenuOpen && (
-        <div className="fade-in-0 fixed inset-0 z-50 flex animate-in flex-col bg-background p-6 duration-200">
+        <div className="fade-in-0 fixed inset-0 z-50 flex animate-in flex-col bg-background p-6 duration-200 overflow-y-auto">
           <Button
             className="!h-auto absolute top-4 right-4 p-1"
             onClick={() => setIsMenuOpen(false)}
@@ -191,14 +206,64 @@ export function MobileBurgerMenuButton(
                 Docs
               </Link>
 
-              <Link
-                className="text-muted-foreground hover:text-foreground"
-                href="https://feedback.thirdweb.com"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Feedback
-              </Link>
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  className="flex items-center justify-between text-muted-foreground hover:text-foreground"
+                  onClick={() => setShowFeedbackSection(!showFeedbackSection)}
+                >
+                  <span>Feedback</span>
+                  {showFeedbackSection ? (
+                    <ChevronUpIcon className="size-4" />
+                  ) : (
+                    <ChevronDownIcon className="size-4" />
+                  )}
+                </button>
+
+                {showFeedbackSection && (
+                  <div className="bg-muted/50 rounded-lg p-4 space-y-4 mb-8">
+                    <h3 className="text-sm font-medium text-foreground">
+                      Share your feedback with us:
+                    </h3>
+
+                    <textarea
+                      value={modalFeedback}
+                      onChange={(e) => setModalFeedback(e.target.value)}
+                      className="w-full bg-background text-foreground rounded-lg p-3 min-h-[100px] resize-none border border-border focus:border-border focus:outline-none placeholder-muted-foreground font-sans text-sm"
+                      placeholder="Tell us what you think..."
+                    />
+
+                    <div className="flex flex-col gap-3">
+                      <p className="text-muted-foreground text-xs">
+                        Have a technical issue?{" "}
+                        <Link
+                          href="/team/~/~/support"
+                          className="underline hover:text-foreground transition-colors"
+                        >
+                          Contact support
+                        </Link>
+                        .
+                      </p>
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={handleModalCancel}
+                          className="flex-1 bg-transparent text-foreground px-3 py-2 rounded-lg font-sans text-sm border border-border hover:bg-muted transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleModalSubmit}
+                          className="flex-1 bg-primary text-primary-foreground px-3 py-2 rounded-lg font-sans text-sm hover:bg-primary/90 transition-colors"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="h-6" />
