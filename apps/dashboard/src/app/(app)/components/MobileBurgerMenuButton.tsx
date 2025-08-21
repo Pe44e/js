@@ -221,7 +221,7 @@ export function MobileBurgerMenuButton(
                 </button>
 
                 {showFeedbackSection && (
-                  <div className="bg-muted/50 rounded-lg p-4 space-y-4 mb-8">
+                  <div className="pl-0 pr-4 space-y-4 mb-6">
                     <h3 className="text-sm font-medium text-foreground">
                       Share your feedback with us:
                     </h3>
@@ -248,14 +248,14 @@ export function MobileBurgerMenuButton(
                         <button
                           type="button"
                           onClick={handleModalCancel}
-                          className="flex-1 bg-transparent text-foreground px-3 py-2 rounded-lg font-sans text-sm border border-border hover:bg-muted transition-colors"
+                          className="flex-1 bg-transparent text-foreground px-3 py-2 rounded-full font-sans text-sm border border-border hover:bg-muted transition-colors"
                         >
                           Cancel
                         </button>
                         <button
                           type="button"
                           onClick={handleModalSubmit}
-                          className="flex-1 bg-primary text-primary-foreground px-3 py-2 rounded-lg font-sans text-sm hover:bg-primary/90 transition-colors"
+                          className="flex-1 bg-primary text-primary-foreground px-3 py-2 rounded-full font-sans text-sm hover:bg-primary/90 transition-colors"
                         >
                           Submit
                         </button>

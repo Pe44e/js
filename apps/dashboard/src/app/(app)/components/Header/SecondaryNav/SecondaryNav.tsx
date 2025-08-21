@@ -65,13 +65,13 @@ export function SecondaryNavLinks() {
         <button
           type="button"
           onClick={() => setShowFeedbackDropdown(!showFeedbackDropdown)}
-          className="text-muted-foreground text-sm hover:text-foreground"
+          className="text-muted-foreground text-sm hover:text-foreground border border-border px-3 py-1.5 rounded-full hover:bg-muted transition-colors"
         >
           Feedback
         </button>
 
         {showFeedbackDropdown && (
-          <div className="absolute top-full right-0 mt-2 bg-background border border-border rounded-2xl p-6 w-96 z-50">
+          <div className="absolute top-full right-0 mt-2 bg-background border border-border rounded-2xl p-3 w-96 z-50">
             <h2 className="text-foreground text-base font-sans mb-2">
               Share your feedback with us:
             </h2>
@@ -96,7 +96,7 @@ export function SecondaryNavLinks() {
                   .
                 </div>
               </div>
-              <div className="flex gap-3 flex-shrink-0">
+              <div className="flex gap-2 flex-shrink-0">
                 <button
                   type="button"
                   onClick={handleModalCancel}
