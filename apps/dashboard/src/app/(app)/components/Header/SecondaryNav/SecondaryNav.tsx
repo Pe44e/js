@@ -5,6 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import type { ThirdwebClient } from "thirdweb";
 import { NotificationsButton } from "@/components/notifications/notification-button";
+import { NavLink } from "@/components/ui/NavLink";
 import type { Account } from "@/hooks/useApi";
 import { AccountButton } from "./account-button.client";
 import { ResourcesDropdownButton } from "./ResourcesDropdownButton";
@@ -37,8 +38,12 @@ export function SecondaryNavLinks() {
   const [showFeedbackDropdown, setShowFeedbackDropdown] = useState(false);
   const [modalFeedback, setModalFeedback] = useState("");
 
-  const handleModalSubmit = () => {
-    console.log("Modal feedback sent:", modalFeedback);
+  const handleModalSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    // Avoid logging PII in production. Keep minimal diagnostics in dev.
+    if (process.env.NODE_ENV !== "production") {
+      console.debug("[feedback] length:", modalFeedback.trim().length);
+    }
     setModalFeedback("");
     setShowFeedbackDropdown(false);
   };
@@ -71,48 +76,64 @@ export function SecondaryNavLinks() {
         </button>
 
         {showFeedbackDropdown && (
-          <div className="absolute top-full right-0 mt-2 bg-background border border-border rounded-2xl p-3 w-96 z-50">
-            <h2 className="text-foreground text-base font-sans mb-2">
+          <div
+            id="feedback-dropdown"
+            role="dialog"
+            aria-labelledby="feedback-heading"
+            className="absolute top-full right-0 mt-2 bg-background border border-border rounded-2xl p-3 w-96 z-50"
+          >
+            <h2
+              id="feedback-heading"
+              className="text-foreground text-base font-sans mb-2"
+            >
               Share your feedback with us:
             </h2>
+            <form onSubmit={handleModalSubmit} className="contents">
+              <label htmlFor="feedback-text" className="sr-only">
+                Feedback
+              </label>
+              <textarea
+                id="feedback-text"
+                value={modalFeedback}
+                onChange={(e) => setModalFeedback(e.target.value)}
+                maxLength={1000}
+                aria-describedby="feedback-help"
+                className="w-full bg-background text-foreground rounded-lg p-4 min-h-[120px] resize-none border border-border focus:border-border focus:outline-none placeholder-muted-foreground font-sans mb-4 text-sm"
+                placeholder="Tell us what you think..."
+              />
 
-            <textarea
-              value={modalFeedback}
-              onChange={(e) => setModalFeedback(e.target.value)}
-              className="w-full bg-background text-foreground rounded-lg p-4 min-h-[120px] resize-none border border-border focus:border-border focus:outline-none placeholder-muted-foreground font-sans mb-4 text-sm"
-              placeholder="Tell us what you think..."
-            />
-
-            <div className="flex items-start justify-between gap-4">
-              <div className="text-muted-foreground text-xs font-sans">
-                <div>Have a technical issue?</div>
-                <div>
-                  <Link
-                    href="/team/~/~/support"
-                    className="underline hover:text-foreground transition-colors"
+              <div className="flex items-start justify-between gap-4">
+                <div className="text-muted-foreground text-xs font-sans">
+                  <div>Have a technical issue?</div>
+                  <div>
+                    <NavLink
+                      href="/team/~/support"
+                      className="underline hover:text-foreground transition-colors"
+                    >
+                      Contact support
+                    </NavLink>
+                    .
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleModalCancel}
+                    className="bg-transparent text-foreground px-4 py-1.5 rounded-full font-sans text-sm border border-border hover:bg-muted transition-colors"
                   >
-                    Contact support
-                  </Link>
-                  .
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!modalFeedback.trim()}
+                    aria-disabled={!modalFeedback.trim()}
+                    className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full font-sans text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  >
+                    Submit
+                  </button>
                 </div>
               </div>
-              <div className="flex gap-2 flex-shrink-0">
-                <button
-                  type="button"
-                  onClick={handleModalCancel}
-                  className="bg-transparent text-foreground px-4 py-1.5 rounded-full font-sans text-sm border border-border hover:bg-muted transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleModalSubmit}
-                  className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full font-sans text-sm hover:bg-primary/90 transition-colors"
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
+            </form>
           </div>
         )}
       </div>

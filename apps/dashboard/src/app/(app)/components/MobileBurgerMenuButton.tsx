@@ -16,6 +16,7 @@ import { useTheme } from "next-themes";
 import { useLayoutEffect, useState } from "react";
 import type { ThirdwebClient } from "thirdweb";
 import { Button } from "@/components/ui/button";
+import { NavLink } from "@/components/ui/NavLink";
 import { Separator } from "@/components/ui/separator";
 import { SkeletonContainer } from "@/components/ui/skeleton";
 import { useEns } from "@/hooks/contract-hooks";
@@ -48,8 +49,12 @@ export function MobileBurgerMenuButton(
   });
   // const [isCMDSearchModalOpen, setIsCMDSearchModalOpen] = useState(false);
 
-  const handleModalSubmit = () => {
-    console.log("Modal feedback sent:", modalFeedback);
+  const handleModalSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    // Avoid logging PII in production. Keep minimal diagnostics in dev.
+    if (process.env.NODE_ENV !== "production") {
+      console.debug("[feedback] length:", modalFeedback.trim().length);
+    }
     setModalFeedback("");
     setShowFeedbackSection(false);
   };
@@ -222,45 +227,59 @@ export function MobileBurgerMenuButton(
 
                 {showFeedbackSection && (
                   <div className="pl-0 pr-4 space-y-4 mb-6">
-                    <h3 className="text-sm font-medium text-foreground">
+                    <h3
+                      id="mobile-feedback-heading"
+                      className="text-sm font-medium text-foreground mb-2"
+                    >
                       Share your feedback with us:
                     </h3>
+                    <form onSubmit={handleModalSubmit} className="contents">
+                      <label htmlFor="mobile-feedback-text" className="sr-only">
+                        Feedback
+                      </label>
+                      <textarea
+                        id="mobile-feedback-text"
+                        value={modalFeedback}
+                        onChange={(e) => setModalFeedback(e.target.value)}
+                        maxLength={1000}
+                        aria-describedby="mobile-feedback-help"
+                        className="w-full bg-background text-foreground rounded-lg p-3 min-h-[100px] resize-none border border-border focus:border-border focus:outline-none placeholder-muted-foreground font-sans text-sm"
+                        placeholder="Tell us what you think..."
+                      />
 
-                    <textarea
-                      value={modalFeedback}
-                      onChange={(e) => setModalFeedback(e.target.value)}
-                      className="w-full bg-background text-foreground rounded-lg p-3 min-h-[100px] resize-none border border-border focus:border-border focus:outline-none placeholder-muted-foreground font-sans text-sm"
-                      placeholder="Tell us what you think..."
-                    />
-
-                    <div className="flex flex-col gap-3">
-                      <p className="text-muted-foreground text-xs">
-                        Have a technical issue?{" "}
-                        <Link
-                          href="/team/~/~/support"
-                          className="underline hover:text-foreground transition-colors"
+                      <div className="flex flex-col gap-3">
+                        <p
+                          id="mobile-feedback-help"
+                          className="text-muted-foreground text-xs"
                         >
-                          Contact support
-                        </Link>
-                        .
-                      </p>
-                      <div className="flex gap-3">
-                        <button
-                          type="button"
-                          onClick={handleModalCancel}
-                          className="flex-1 bg-transparent text-foreground px-3 py-2 rounded-full font-sans text-sm border border-border hover:bg-muted transition-colors"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleModalSubmit}
-                          className="flex-1 bg-primary text-primary-foreground px-3 py-2 rounded-full font-sans text-sm hover:bg-primary/90 transition-colors"
-                        >
-                          Submit
-                        </button>
+                          Have a technical issue?{" "}
+                          <NavLink
+                            href="/team/~/support"
+                            className="underline hover:text-foreground transition-colors"
+                          >
+                            Contact support
+                          </NavLink>
+                          .
+                        </p>
+                        <div className="flex gap-3">
+                          <button
+                            type="button"
+                            onClick={handleModalCancel}
+                            className="flex-1 bg-transparent text-foreground px-3 py-2 rounded-full font-sans text-sm border border-border hover:bg-muted transition-colors"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={!modalFeedback.trim()}
+                            aria-disabled={!modalFeedback.trim()}
+                            className="flex-1 bg-primary text-primary-foreground px-3 py-2 rounded-full font-sans text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
+                          >
+                            Submit
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 )}
               </div>
