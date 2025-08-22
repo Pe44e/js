@@ -14,7 +14,9 @@ import {
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useLayoutEffect, useState } from "react";
+import { toast } from "sonner";
 import type { ThirdwebClient } from "thirdweb";
+import { reportProductFeedback } from "@/analytics/report";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/ui/NavLink";
 import { Separator } from "@/components/ui/separator";
@@ -51,10 +53,19 @@ export function MobileBurgerMenuButton(
 
   const handleModalSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
-    // Avoid logging PII in production. Keep minimal diagnostics in dev.
-    if (process.env.NODE_ENV !== "production") {
-      console.debug("[feedback] length:", modalFeedback.trim().length);
-    }
+
+    // Report feedback to PostHog
+    reportProductFeedback({
+      feedback: modalFeedback,
+      feedbackLength: modalFeedback.trim().length,
+      source: "mobile",
+    });
+
+    // Show success notification
+    toast.success("Feedback submitted successfully!", {
+      description: "Thank you for your feedback. We'll review it shortly.",
+    });
+
     setModalFeedback("");
     setShowFeedbackSection(false);
   };

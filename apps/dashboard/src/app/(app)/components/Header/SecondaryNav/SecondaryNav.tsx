@@ -3,7 +3,9 @@
 import Link from "next/link";
 import type React from "react";
 import { useState } from "react";
+import { toast } from "sonner";
 import type { ThirdwebClient } from "thirdweb";
+import { reportProductFeedback } from "@/analytics/report";
 import { NotificationsButton } from "@/components/notifications/notification-button";
 import { NavLink } from "@/components/ui/NavLink";
 import type { Account } from "@/hooks/useApi";
@@ -40,10 +42,19 @@ export function SecondaryNavLinks() {
 
   const handleModalSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
-    // Avoid logging PII in production. Keep minimal diagnostics in dev.
-    if (process.env.NODE_ENV !== "production") {
-      console.debug("[feedback] length:", modalFeedback.trim().length);
-    }
+
+    // Report feedback to PostHog
+    reportProductFeedback({
+      feedback: modalFeedback,
+      feedbackLength: modalFeedback.trim().length,
+      source: "desktop",
+    });
+
+    // Show success notification
+    toast.success("Feedback submitted successfully!", {
+      description: "Thank you for your feedback. We'll review it shortly.",
+    });
+
     setModalFeedback("");
     setShowFeedbackDropdown(false);
   };
