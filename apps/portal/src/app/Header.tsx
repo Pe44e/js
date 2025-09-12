@@ -32,10 +32,6 @@ const links = [
     name: "Wallets",
   },
   {
-    href: "/payments",
-    name: "Payments",
-  },
-  {
     href: "/transactions",
     name: "Transactions",
   },
@@ -44,12 +40,20 @@ const links = [
     name: "Contracts",
   },
   {
+    href: "/payments",
+    name: "Payments",
+  },
+  {
+    href: "/bridge",
+    name: "Bridge",
+  },
+  {
     href: "/tokens",
     name: "Tokens",
   },
   {
-    href: "/insight",
-    name: "Insight",
+    href: "/reference",
+    name: "API Reference",
   },
 ];
 
@@ -124,7 +128,7 @@ const apisLinks = [
     name: "HTTP API",
   },
   {
-    href: "https://insight.thirdweb.com/reference",
+    href: "/insight",
     name: "Insight",
   },
   {
@@ -144,7 +148,7 @@ const apisLinks = [
 const aiLinks = [
   {
     href: "/ai/chat",
-    name: "Chat API",
+    name: "Blockchain LLM",
   },
   {
     href: "/ai/mcp",
@@ -281,7 +285,7 @@ export function Header() {
                   }}
                 >
                   <NavLink href={link.href} name={link.name} />
-                  {pathname.startsWith(link.href) && (
+                  {pathname?.startsWith(link.href) && (
                     <div className="bg-violet-700 h-[2px] inset-x-0 rounded-full absolute -bottom-1" />
                   )}
                 </li>
@@ -526,7 +530,7 @@ function NavLink(props: {
     <Link
       className={clsx(
         "font-medium text-base transition-colors hover:text-foreground xl:text-sm",
-        pathname.startsWith(props.href)
+        pathname?.startsWith(props.href)
           ? "text-foreground"
           : "text-muted-foreground",
         props.icon ? "flex flex-row gap-3" : "",

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { CoinsIcon, ImagesIcon, ImportIcon } from "lucide-react";
+import { ArrowDownToLineIcon, CoinsIcon, ImagesIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import type { ThirdwebClient } from "thirdweb";
@@ -24,13 +24,14 @@ export function ImportTokenButton(props: {
     <>
       <Button
         variant="outline"
-        className="gap-1.5 rounded-full"
+        className="gap-2 rounded-full bg-card"
+        size="sm"
         onClick={() => {
           reportAssetImportStarted();
           setImportModalOpen(true);
         }}
       >
-        <ImportIcon className="size-4" />
+        <ArrowDownToLineIcon className="size-3.5 text-muted-foreground" />
         Import Token
       </Button>
 
@@ -61,7 +62,7 @@ export function Cards(props: {
   projectId: string;
 }) {
   return (
-    <div className="flex flex-row gap-4">
+    <div className="flex flex-col gap-4">
       <CardLink
         description="Launch your own ERC-20 coin"
         href={`/team/${props.teamSlug}/${props.projectSlug}/tokens/create/token`}
@@ -106,8 +107,8 @@ function CardLink(props: {
       tabIndex={onClick ? 0 : undefined}
     >
       <div className="mb-4 flex">
-        <div className="flex items-center justify-center rounded-full border p-2.5">
-          <props.icon className="size-5 text-muted-foreground" />
+        <div className="flex items-center justify-center rounded-full border p-2">
+          <props.icon className="size-4 text-muted-foreground" />
         </div>
       </div>
 

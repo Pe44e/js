@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import CodeClient, { CodeLoading } from "../../code/code.client";
+import { CodeClient } from "../../code/code.client";
 import { Details } from "../Details";
 import type { APIParameter } from "./ApiEndpoint";
 import { RequestExample } from "./RequestExample";
@@ -27,7 +27,7 @@ interface DynamicRequestExampleProps {
 
 function InlineParameterItem({ param }: { param: APIParameter }) {
   return (
-    <div className="flex flex-col gap-2 p-3 bg-muted/30 rounded-lg">
+    <div className="flex flex-col gap-2 p-3 rounded-lg">
       <div className="flex items-center gap-2 flex-wrap">
         <code className="text-foreground text-sm font-mono bg-background px-2 py-1 rounded border">
           {param.name}
@@ -59,7 +59,6 @@ function InlineParameterItem({ param }: { param: APIParameter }) {
             }
             className="rounded-none border-none"
             lang="json"
-            loader={<CodeLoading />}
             scrollableContainerClassName="m-0"
             scrollableClassName="max-h-[200px]"
           />
@@ -146,7 +145,6 @@ export function DynamicRequestExample(props: DynamicRequestExampleProps) {
               <CodeClient
                 className="rounded-none border-none"
                 code={example.code}
-                loader={<CodeLoading />}
                 scrollableContainerClassName="m-0"
                 lang={example.lang}
               />
@@ -166,7 +164,6 @@ export function DynamicRequestExample(props: DynamicRequestExampleProps) {
                     <CodeClient
                       className="rounded-none border-none"
                       code={selectedExample.code}
-                      loader={<CodeLoading />}
                       scrollableContainerClassName="m-0"
                       lang={selectedExample.lang}
                     />

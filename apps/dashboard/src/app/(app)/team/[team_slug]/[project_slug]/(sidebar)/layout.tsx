@@ -12,7 +12,6 @@ import { TeamHeaderLoggedIn } from "../../../components/TeamHeader/team-header-l
 import { StaffModeNotice } from "../../(team)/_components/StaffModeNotice";
 import { ProjectSidebarLayout } from "./components/ProjectSidebarLayout";
 import { SaveLastUsedProject } from "./components/SaveLastUsedProject";
-import { getEngineInstances } from "./engine/_utils/getEngineInstances";
 
 export default async function ProjectLayout(props: {
   children: React.ReactNode;
@@ -20,6 +19,7 @@ export default async function ProjectLayout(props: {
   params: Promise<{ team_slug: string; project_slug: string }>;
 }) {
   const params = await props.params;
+
   const [accountAddress, teams, account, authToken, team, project] =
     await Promise.all([
       getAuthTokenWalletAddress(),
@@ -56,13 +56,6 @@ export default async function ProjectLayout(props: {
     teamId: team.id,
   });
 
-  const engineInstances = await getEngineInstances({
-    authToken: authToken,
-    teamIdOrSlug: project.teamId,
-  });
-
-  const hasEngineInstances = !!engineInstances.data?.length;
-
   const isStaffMode = !teams.some((t) => t.slug === team.slug);
 
   return (
@@ -80,10 +73,7 @@ export default async function ProjectLayout(props: {
             teamsAndProjects={teamsAndProjects}
           />
         </div>
-        <ProjectSidebarLayout
-          layoutPath={layoutPath}
-          hasEngineInstances={hasEngineInstances}
-        >
+        <ProjectSidebarLayout layoutPath={layoutPath}>
           {props.children}
         </ProjectSidebarLayout>
       </div>

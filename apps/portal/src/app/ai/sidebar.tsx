@@ -4,7 +4,7 @@ import type { SideBar } from "@/components/Layouts/DocLayout";
 export const sidebar: SideBar = {
   links: [
     {
-      name: "Chat API",
+      name: "Blockchain LLM",
       isCollapsible: false,
       links: [
         {
@@ -18,12 +18,24 @@ export const sidebar: SideBar = {
           icon: <ExternalLinkIcon />,
         },
         {
+          name: "Transaction Execution",
+          href: "/ai/chat/execution",
+        },
+        {
           name: "Streaming Responses",
           href: "/ai/chat/streaming",
         },
         {
+          name: "Vercel AI SDK",
+          href: "/ai/chat/ai-sdk",
+        },
+        {
+          name: "OpenAI SDK",
+          href: "/ai/chat/openai-sdk",
+        },
+        {
           name: "API Reference",
-          href: "https://api.thirdweb-dev.com/reference#tag/ai/post/ai/chat",
+          href: "/reference#tag/ai/post/ai/chat",
         },
       ],
     },

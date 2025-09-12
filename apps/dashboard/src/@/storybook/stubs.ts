@@ -74,6 +74,12 @@ export function teamStub(id: string, billingPlan: Team["billingPlan"]): Team {
       rpc: {
         enabled: true,
         rateLimit: 1000,
+        websockets: {
+          enabled: false,
+          reasonCode: "enterprise_plan_required",
+          maxConnections: 0,
+          maxSubscriptions: 0,
+        },
       },
       storage: {
         download: {
@@ -272,4 +278,33 @@ export function newAccountStub(overrides?: Partial<Account>): Account {
     name: undefined,
     ...overrides,
   };
+}
+
+export function randomLorem(length: number) {
+  const loremWords = [
+    "lorem",
+    "ipsum",
+    "dolor",
+    "sit",
+    "amet",
+    "consectetur",
+    "adipiscing",
+    "elit",
+    "sed",
+    "do",
+    "eiusmod",
+    "tempor",
+    "incididunt",
+    "ut",
+    "labore",
+    "et",
+    "dolore",
+    "magna",
+    "aliqua",
+  ];
+
+  return Array.from({ length }, () => {
+    const randomIndex = Math.floor(Math.random() * loremWords.length);
+    return loremWords[randomIndex];
+  }).join(" ");
 }

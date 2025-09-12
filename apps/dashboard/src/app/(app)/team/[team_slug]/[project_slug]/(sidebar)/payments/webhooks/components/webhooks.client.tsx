@@ -37,7 +37,7 @@ import {
   RequiredFormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/Spinner/Spinner";
+import { Spinner } from "@/components/ui/Spinner";
 import {
   Select,
   SelectContent,
@@ -156,7 +156,7 @@ const formSchema = z.object({
   version: z.string(),
 });
 
-export function CreatePaymentWebhookButton(
+function CreatePaymentWebhookButton(
   props: PropsWithChildren<PayWebhooksPageProps>,
 ) {
   const [open, setOpen] = useState(false);

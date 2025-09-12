@@ -2,7 +2,7 @@ import { Code2Icon, EyeIcon } from "lucide-react";
 import type { JSX } from "react";
 import type { BundledLanguage } from "shiki";
 import { ClientOnly } from "../ClientOnly";
-import { Code } from "./code";
+import { CodeServer } from "./code";
 
 type CodeExampleProps = {
   preview: JSX.Element;
@@ -24,10 +24,10 @@ export const CodeExample: React.FC<CodeExampleProps> = ({
     <div className="relative z-0">
       {header && (
         <div className="mb-4">
-          <h2 className="font-semibold text-xl tracking-tight capitalize">
+          <h2 className="font-semibold text-xl tracking-tight capitalize mb-1">
             {header.title}
           </h2>
-          <p className="max-w-4xl text-muted-foreground text-balance text-sm md:text-base">
+          <p className="max-w-5xl text-muted-foreground text-sm md:text-base text-pretty">
             {header.description}
           </p>
         </div>
@@ -35,7 +35,7 @@ export const CodeExample: React.FC<CodeExampleProps> = ({
       <div className="grid grid-cols-1 overflow-hidden rounded-lg border bg-card md:grid-cols-2">
         <div className="flex grow flex-col border-b md:border-r md:border-b-0">
           <TabName icon={Code2Icon} name="Code" />
-          <Code
+          <CodeServer
             className="h-full rounded-none border-none"
             code={code}
             lang={lang}
@@ -55,7 +55,7 @@ export const CodeExample: React.FC<CodeExampleProps> = ({
   );
 };
 
-function TabName(props: {
+export function TabName(props: {
   name: string;
   icon: React.FC<{ className: string }>;
 }) {

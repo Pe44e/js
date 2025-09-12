@@ -9,8 +9,8 @@ import {
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { defineChain, type ThirdwebClient } from "thirdweb";
+import { useState } from "react";
+import type { ThirdwebClient } from "thirdweb";
 import { useWalletBalance } from "thirdweb/react";
 import {
   DEFAULT_ACCOUNT_FACTORY_V0_7,
@@ -48,6 +48,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ToolTipLabel } from "@/components/ui/tooltip";
+import { useV5DashboardChain } from "@/hooks/chains/v5-adapter";
 import { WalletProductIcon } from "@/icons/WalletProductIcon";
 import { cn } from "@/lib/utils";
 import CreateServerWallet from "../components/create-server-wallet.client";
@@ -80,18 +81,18 @@ export function ServerWalletsTableUI({
     <div>
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="flex flex-col lg:flex-row lg:justify-between p-4 lg:px-6 py-5 lg:items-center gap-5">
-          <div className="flex flex-row items-center gap-2">
-            <div className="p-4 rounded-full bg-background border border-border">
-              <WalletProductIcon className="size-5 text-muted-foreground" />
+          <div>
+            <div className="flex mb-3">
+              <div className="p-2 rounded-full bg-background border border-border">
+                <WalletProductIcon className="size-5 text-muted-foreground" />
+              </div>
             </div>
-            <div>
-              <h2 className="font-semibold text-2xl tracking-tight">
-                Server Wallets
-              </h2>
-              <p className="text-muted-foreground text-sm">
-                Create and manage server wallets for your project
-              </p>
-            </div>
+            <h2 className="font-semibold text-2xl tracking-tight">
+              Server Wallets
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              Create and manage server wallets for your project
+            </p>
           </div>
 
           <div className="flex flex-col items-start lg:items-end gap-5 border-t lg:border-t-0 pt-5 lg:pt-0 border-dashed">
@@ -277,10 +278,7 @@ function ServerWalletTableRow(props: {
   const { wallet, project, teamSlug, client, chainId, showSmartAccount } =
     props;
 
-  const chain = useMemo(() => {
-    // eslint-disable-next-line no-restricted-syntax
-    return defineChain(chainId);
-  }, [chainId]);
+  const chain = useV5DashboardChain(chainId);
 
   const smartAccountAddressQuery = useQuery({
     queryFn: async () => {
@@ -458,10 +456,10 @@ function WalletBalanceCell(props: {
   chainId: number;
   client: ThirdwebClient;
 }) {
+  const chain = useV5DashboardChain(props.chainId);
   const balance = useWalletBalance({
     address: props.address,
-    // eslint-disable-next-line no-restricted-syntax
-    chain: defineChain(props.chainId),
+    chain: chain,
     client: props.client,
   });
 

@@ -1,5 +1,61 @@
 # @thirdweb-dev/nebula
 
+## 0.2.45
+
+### Patch Changes
+
+- Updated dependencies [[`0b45405`](https://github.com/thirdweb-dev/js/commit/0b454050b14806c103ea446e3667d0c970739912), [`dc1f7ab`](https://github.com/thirdweb-dev/js/commit/dc1f7ab2ee820be512776a413f7de362ff6b98ef), [`ea80610`](https://github.com/thirdweb-dev/js/commit/ea8061048adddb9fb7648f29ce1f3041f250ddfb), [`3ad9f7d`](https://github.com/thirdweb-dev/js/commit/3ad9f7deba850b0a50e355111af11fd419db2efd)]:
+  - thirdweb@5.105.45
+
+## 0.2.44
+
+### Patch Changes
+
+- Updated dependencies [[`ef15ba7`](https://github.com/thirdweb-dev/js/commit/ef15ba7c434f8c9bde3b6d45d43d90e74f20616b)]:
+  - thirdweb@5.105.44
+
+## 0.2.43
+
+### Patch Changes
+
+- Updated dependencies [[`1759112`](https://github.com/thirdweb-dev/js/commit/1759112d722e11d2d9a902f2221e70636188015e)]:
+  - thirdweb@5.105.43
+
+## 0.2.42
+
+### Patch Changes
+
+- Updated dependencies [[`b149019`](https://github.com/thirdweb-dev/js/commit/b149019318a3a9f73aab96b68a92daef41a961e2), [`4ff1cf7`](https://github.com/thirdweb-dev/js/commit/4ff1cf79794af0c2e52f4beacbcf0d5d69266365)]:
+  - thirdweb@5.105.42
+
+## 0.2.41
+
+### Patch Changes
+
+- Updated dependencies [[`af6a306`](https://github.com/thirdweb-dev/js/commit/af6a306955aaf6a76fc22e3f8fd4e78854680d9c)]:
+  - thirdweb@5.105.41
+
+## 0.2.40
+
+### Patch Changes
+
+- Updated dependencies [[`597431e`](https://github.com/thirdweb-dev/js/commit/597431ec1dc7b6a8b52b6676256e77d96b9a16b1)]:
+  - thirdweb@5.105.40
+
+## 0.2.39
+
+### Patch Changes
+
+- Updated dependencies [[`50c6371`](https://github.com/thirdweb-dev/js/commit/50c6371e1ec12e296839987a6c25d9814dea2208)]:
+  - thirdweb@5.105.39
+
+## 0.2.38
+
+### Patch Changes
+
+- Updated dependencies [[`76cfecb`](https://github.com/thirdweb-dev/js/commit/76cfecb3054c03d952980a38842607300824a3bd), [`44e6e11`](https://github.com/thirdweb-dev/js/commit/44e6e115d9519dd75ae9efa20c8be069fee067ea), [`f3ad6ef`](https://github.com/thirdweb-dev/js/commit/f3ad6efcf829e23435c4e2859809a74be877809d)]:
+  - thirdweb@5.105.38
+
 ## 0.2.37
 
 ### Patch Changes

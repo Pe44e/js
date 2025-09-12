@@ -7,13 +7,15 @@ import {
   HomeIcon,
   LockIcon,
   RssIcon,
-  SettingsIcon,
+  Settings2Icon,
   WebhookIcon,
 } from "lucide-react";
 import { FullWidthSidebarLayout } from "@/components/blocks/full-width-sidebar-layout";
 import { Badge } from "@/components/ui/badge";
+import { BridgeIcon } from "@/icons/BridgeIcon";
 import { ContractIcon } from "@/icons/ContractIcon";
 import { InsightIcon } from "@/icons/InsightIcon";
+import { NebulaIcon } from "@/icons/NebulaIcon";
 import { PayIcon } from "@/icons/PayIcon";
 import { SmartAccountIcon } from "@/icons/SmartAccountIcon";
 import { TokenIcon } from "@/icons/TokenIcon";
@@ -22,7 +24,6 @@ import { WalletProductIcon } from "@/icons/WalletProductIcon";
 export function ProjectSidebarLayout(props: {
   layoutPath: string;
   children: React.ReactNode;
-  hasEngineInstances: boolean;
 }) {
   return (
     <FullWidthSidebarLayout
@@ -54,6 +55,11 @@ export function ProjectSidebarLayout(props: {
               icon: ContractIcon,
               label: "Contracts",
             },
+            {
+              href: `${props.layoutPath}/ai`,
+              icon: NebulaIcon,
+              label: "AI",
+            },
           ],
         },
         {
@@ -66,6 +72,11 @@ export function ProjectSidebarLayout(props: {
               href: `${props.layoutPath}/payments`,
               icon: PayIcon,
               label: "Payments",
+            },
+            {
+              href: `${props.layoutPath}/bridge`,
+              icon: BridgeIcon,
+              label: "Bridge",
             },
             {
               href: `${props.layoutPath}/tokens`,
@@ -104,21 +115,19 @@ export function ProjectSidebarLayout(props: {
               icon: LockIcon,
               label: "Vault",
             },
-            ...(props.hasEngineInstances
-              ? [
-                  {
-                    href: `${props.layoutPath}/engine`,
-                    icon: DatabaseIcon,
-                    label: (
-                      <span className="flex items-center gap-2">Engine</span>
-                    ),
-                  },
-                ]
-              : []),
+            // linkely want to move this to `team` level eventually
+            {
+              href: `${props.layoutPath}/engine`,
+              icon: DatabaseIcon,
+              label: "Engine",
+            },
           ],
         },
       ]}
       footerSidebarLinks={[
+        {
+          separator: true,
+        },
         {
           href: `${props.layoutPath}/webhooks/contracts`,
           icon: WebhookIcon,
@@ -129,7 +138,7 @@ export function ProjectSidebarLayout(props: {
         },
         {
           href: `${props.layoutPath}/settings`,
-          icon: SettingsIcon,
+          icon: Settings2Icon,
           label: "Project Settings",
         },
         {

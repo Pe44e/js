@@ -1,6 +1,6 @@
 "use client";
 
-import { ImportIcon } from "lucide-react";
+import { ArrowDownToLineIcon } from "lucide-react";
 import { useState } from "react";
 import type { ThirdwebClient } from "thirdweb";
 import { ImportModal } from "@/components/contracts/import-contract/modal";
@@ -31,13 +31,14 @@ export function ImportContractButton(props: {
       />
 
       <Button
-        className="gap-1.5 rounded-full"
+        className="gap-2 rounded-full bg-card"
+        size="sm"
         onClick={() => {
           setImportModalOpen(true);
         }}
         variant="outline"
       >
-        <ImportIcon className="size-4" />
+        <ArrowDownToLineIcon className="size-3.5 text-muted-foreground" />
         Import contract
       </Button>
     </>

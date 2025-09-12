@@ -61,7 +61,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Spinner } from "@/components/ui/Spinner/Spinner";
+import { Spinner } from "@/components/ui/Spinner";
 import {
   Table,
   TableBody,
@@ -131,8 +131,8 @@ export function DedicatedEngineSubscriptionButton(props: { team: Team }) {
   const isMobile = useIsMobile();
 
   const trigger = (
-    <Button className="gap-1.5 rounded-full">
-      <PlusIcon className="size-4" />
+    <Button className="gap-2 rounded-full" size="sm">
+      <PlusIcon className="size-3.5" />
       Deploy Dedicated Engine
     </Button>
   );

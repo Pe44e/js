@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useMemo } from "react";
-import type { Token } from "../../../../bridge/types/Token.js";
+import type { TokenWithPrices } from "../../../../bridge/types/Token.js";
 import type { ThirdwebClient } from "../../../../client/client.js";
 import type { SupportedFiatCurrency } from "../../../../pay/convert/type.js";
 import type { PurchaseData } from "../../../../pay/types.js";
@@ -46,7 +46,7 @@ export type UIOptions = Prettify<
   } & (
     | {
         mode: "fund_wallet";
-        destinationToken: Token;
+        destinationToken: TokenWithPrices;
         initialAmount?: string;
         presetOptions?: [number, number, number];
       }
@@ -54,7 +54,7 @@ export type UIOptions = Prettify<
         mode: "direct_payment";
         paymentInfo: {
           sellerAddress: Address;
-          token: Token;
+          token: TokenWithPrices;
           amount: string;
           feePayer?: "sender" | "receiver";
         };
@@ -126,6 +126,11 @@ export interface BridgeOrchestratorProps {
   paymentMethods?: ("crypto" | "card")[];
 
   /**
+   * The user's ISO 3166 alpha-2 country code. This is used to determine onramp provider support.
+   */
+  country: string | undefined;
+
+  /**
    * Whether to show thirdweb branding in the widget.
    * @default true
    */
@@ -148,6 +153,7 @@ export function BridgeOrchestrator({
   paymentMethods = ["crypto", "card"],
   showThirdwebBranding = true,
   supportedTokens,
+  country = "US",
 }: BridgeOrchestratorProps) {
   // Initialize adapters
   const adapters = useMemo(
@@ -235,7 +241,7 @@ export function BridgeOrchestrator({
 
   // Handle requirements resolved from FundWallet and DirectPayment
   const handleRequirementsResolved = useCallback(
-    (amount: string, token: Token, receiverAddress: Address) => {
+    (amount: string, token: TokenWithPrices, receiverAddress: Address) => {
       send({
         destinationAmount: amount,
         destinationToken: token,
@@ -277,7 +283,6 @@ export function BridgeOrchestrator({
       {state.value === "init" && uiOptions.mode === "direct_payment" && (
         <DirectPayment
           client={client}
-          connectOptions={modifiedConnectOptions}
           onContinue={handleRequirementsResolved}
           showThirdwebBranding={showThirdwebBranding}
           uiOptions={uiOptions}
@@ -320,6 +325,7 @@ export function BridgeOrchestrator({
             receiverAddress={state.context.receiverAddress}
             currency={uiOptions.currency}
             supportedTokens={supportedTokens}
+            country={country}
           />
         )}
 
@@ -389,6 +395,7 @@ export function BridgeOrchestrator({
             preparedQuote={state.context.quote}
             uiOptions={uiOptions}
             windowAdapter={webWindowAdapter}
+            hasPaymentId={!!paymentLinkId}
           />
         )}
 

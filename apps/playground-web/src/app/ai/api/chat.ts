@@ -1,45 +1,11 @@
 import { stream } from "fetch-event-stream";
-import type { NebulaTxData, NebulaUserMessage } from "./types";
-
-const API_URL = `https://${process.env.NEXT_PUBLIC_API_URL || "api.thirdweb.com"}`;
-
-export type NebulaContext = {
-  chainIds: string[] | null;
-  walletAddress: string | null;
-  sessionId: string | null;
-};
-
-type NebulaSwapData = {
-  action: string;
-  transaction: {
-    chainId: number;
-    to: `0x${string}`;
-    data: `0x${string}`;
-  };
-  to: {
-    address: `0x${string}`;
-    amount: string;
-    chain_id: number;
-    decimals: number;
-    symbol: string;
-  };
-  from: {
-    address: `0x${string}`;
-    amount: string;
-    chain_id: number;
-    decimals: number;
-    symbol: string;
-  };
-  intent: {
-    amount: string;
-    destinationChainId: number;
-    destinationTokenAddress: `0x${string}`;
-    originChainId: number;
-    originTokenAddress: `0x${string}`;
-    receiver: `0x${string}`;
-    sender: `0x${string}`;
-  };
-};
+import {
+  API_URL,
+  type NebulaContext,
+  type NebulaSwapData,
+  type NebulaTxData,
+  type NebulaUserMessage,
+} from "./types";
 
 export async function promptNebula(params: {
   message: NebulaUserMessage;
@@ -56,7 +22,9 @@ export async function promptNebula(params: {
     body.context = {
       chain_ids: params.context.chainIds?.map(Number) || [],
       session_id: params.context.sessionId ?? undefined,
-      wallet_address: params.context.walletAddress,
+      from: params.context.walletAddress ?? undefined,
+      auto_execute_transactions:
+        params.context.autoExecuteTransactions || false,
     };
   }
 
@@ -119,7 +87,7 @@ export async function promptNebula(params: {
 
         if (data.type === "sign_transaction") {
           try {
-            const parsedTxData = JSON.parse(data.data) as NebulaTxData;
+            const parsedTxData = data.data as NebulaTxData;
             params.handleStream({
               data: parsedTxData,
               event: "action",
@@ -133,7 +101,7 @@ export async function promptNebula(params: {
 
         if (data.type === "sign_swap") {
           try {
-            const swapData = JSON.parse(data.data) as NebulaSwapData;
+            const swapData = data.data as NebulaSwapData;
             params.handleStream({
               data: swapData,
               event: "action",

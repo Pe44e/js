@@ -1,14 +1,12 @@
 "use client";
 
-import { ArrowLeftRightIcon, BotIcon } from "lucide-react";
+import { ArrowLeftRightIcon, BotIcon, Code2Icon } from "lucide-react";
 import type { ShadcnSidebarLink } from "@/components/blocks/full-width-sidebar-layout";
 import { ContractIcon } from "../icons/ContractIcon";
-import { InsightIcon } from "../icons/InsightIcon";
 import { PayIcon } from "../icons/PayIcon";
 import { SmartAccountIcon } from "../icons/SmartAccountIcon";
 import { TokenIcon } from "../icons/TokenIcon";
 import { WalletProductIcon } from "../icons/WalletProductIcon";
-import { insightBlueprints } from "./insight/insightBlueprints";
 
 const ai: ShadcnSidebarLink = {
   subMenu: {
@@ -17,8 +15,17 @@ const ai: ShadcnSidebarLink = {
   },
   links: [
     {
+      href: "/ai",
+      label: "Overview",
+      exactMatch: true,
+    },
+    {
       href: "/ai/chat",
-      label: "Chat API",
+      label: "Blockchain LLM",
+    },
+    {
+      href: "/ai/ai-sdk",
+      label: "AI SDK Integration",
     },
   ],
 };
@@ -29,6 +36,11 @@ const wallets: ShadcnSidebarLink = {
     icon: WalletProductIcon,
   },
   links: [
+    {
+      label: "Overview",
+      href: "/wallets",
+      exactMatch: true,
+    },
     {
       href: "/wallets/sign-in/button",
       label: "Connect Button",
@@ -57,12 +69,16 @@ const wallets: ShadcnSidebarLink = {
       href: "/wallets/social",
       label: "Social Profiles",
     },
-
     {
       subMenu: {
         label: "Headless Components",
       },
       links: [
+        {
+          label: "Overview",
+          href: "/wallets/headless",
+          exactMatch: true,
+        },
         {
           href: "/wallets/headless/account-components",
           label: "Account Components",
@@ -86,6 +102,11 @@ const contracts: ShadcnSidebarLink = {
     icon: ContractIcon,
   },
   links: [
+    {
+      label: "Overview",
+      href: "/contracts",
+      exactMatch: true,
+    },
     {
       href: "/contracts/read",
       label: "Read Contract",
@@ -112,6 +133,11 @@ const tokens: ShadcnSidebarLink = {
   },
   links: [
     {
+      label: "Overview",
+      href: "/tokens",
+      exactMatch: true,
+    },
+    {
       href: "/tokens/token-components",
       label: "Token Components",
     },
@@ -128,6 +154,11 @@ const accountAbstractions: ShadcnSidebarLink = {
     icon: SmartAccountIcon,
   },
   links: [
+    {
+      label: "Overview",
+      href: "/account-abstraction",
+      exactMatch: true,
+    },
     {
       href: "/account-abstraction/eip-4337",
       label: "EIP-4337",
@@ -154,8 +185,9 @@ const payments: ShadcnSidebarLink = {
   },
   links: [
     {
-      href: "/payments/ui-components",
-      label: "UI Components",
+      label: "Overview",
+      href: "/payments",
+      exactMatch: true,
     },
     {
       href: "/payments/fund-wallet",
@@ -169,10 +201,6 @@ const payments: ShadcnSidebarLink = {
       href: "/payments/transactions",
       label: "Onchain Transaction",
     },
-    {
-      href: "/payments/backend",
-      label: "Payments API",
-    },
   ],
 };
 
@@ -182,6 +210,15 @@ const transactions: ShadcnSidebarLink = {
     icon: ArrowLeftRightIcon,
   },
   links: [
+    {
+      label: "Overview",
+      href: "/transactions",
+      exactMatch: true,
+    },
+    {
+      href: "/transactions/users",
+      label: "From User Wallets",
+    },
     {
       href: "/transactions/airdrop-tokens",
       label: "Airdrop Tokens",
@@ -197,36 +234,6 @@ const transactions: ShadcnSidebarLink = {
   ],
 };
 
-const insightLinks: ShadcnSidebarLink[] = insightBlueprints.map((blueprint) => {
-  return {
-    links: blueprint.paths.map((pathInfo) => {
-      return {
-        href: `/insight/${blueprint.id}?path=${pathInfo.path}`,
-        label: pathInfo.name,
-        exactMatch: true,
-      };
-    }),
-    subMenu: {
-      label: blueprint.name,
-    },
-  };
-});
-
-const insight: ShadcnSidebarLink = {
-  links: [
-    {
-      href: "/insight",
-      label: "Overview",
-      exactMatch: true,
-    },
-    ...insightLinks,
-  ],
-  subMenu: {
-    label: "Insight",
-    icon: InsightIcon,
-  },
-};
-
 export const sidebarLinks: ShadcnSidebarLink[] = [
   ai,
   wallets,
@@ -234,6 +241,10 @@ export const sidebarLinks: ShadcnSidebarLink[] = [
   contracts,
   payments,
   tokens,
-  insight,
   accountAbstractions,
+  {
+    href: "/reference",
+    label: "API Reference",
+    icon: Code2Icon,
+  },
 ];

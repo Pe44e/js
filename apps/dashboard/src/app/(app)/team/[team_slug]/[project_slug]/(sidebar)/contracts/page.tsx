@@ -1,10 +1,11 @@
-import { RocketIcon } from "lucide-react";
+import { ArrowUpFromLineIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 import { getAuthToken } from "@/api/auth-token";
 import { getProject } from "@/api/project/projects";
 import { getTeamBySlug } from "@/api/team/get-team";
 import { ProjectPage } from "@/components/blocks/project-page/project-page";
 import { getClientThirdwebClient } from "@/constants/thirdweb-client.client";
+import { ContractIcon } from "@/icons/ContractIcon";
 import { loginRedirect } from "@/utils/redirects";
 import { DeployedContractsPage } from "./DeployedContractsPage";
 import { ImportContractButton } from "./import-contract-button";
@@ -42,13 +43,19 @@ export default async function Page(props: {
       header={{
         client,
         title: "Contracts",
-        description:
-          "Read, write, and deploy smart contracts on any EVM compatible blockchain. Deploy contracts from templates, or build your own from scratch.",
+        icon: ContractIcon,
+        description: (
+          <>
+            Read, write, and deploy smart contracts on any EVM compatible
+            blockchain. <br className="max-sm:hidden" /> Deploy contracts from
+            templates, or build your own from scratch
+          </>
+        ),
         actions: {
           primary: {
             label: "Deploy Contract",
             href: "/explore",
-            icon: <RocketIcon className="size-4" />,
+            icon: <ArrowUpFromLineIcon className="size-3.5" />,
           },
           secondary: {
             component: (
@@ -78,10 +85,6 @@ export default async function Page(props: {
           {
             type: "webhooks",
             href: `/team/${params.team_slug}/${params.project_slug}/webhooks/contracts`,
-          },
-          {
-            type: "settings",
-            href: `/team/${params.team_slug}/${params.project_slug}/settings/contracts`,
           },
         ],
       }}

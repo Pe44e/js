@@ -5,6 +5,7 @@ import { getAuthToken } from "@/api/auth-token";
 import { getProject } from "@/api/project/projects";
 import { ProjectPage } from "@/components/blocks/project-page/project-page";
 import { getClientThirdwebClient } from "@/constants/thirdweb-client.client";
+import { InsightIcon } from "@/icons/InsightIcon";
 import { getFiltersFromSearchParams } from "@/lib/time";
 import { loginRedirect } from "@/utils/redirects";
 import { InsightAnalytics } from "./components/InsightAnalytics";
@@ -49,30 +50,15 @@ export default async function Page(props: {
     <ProjectPage
       header={{
         client,
+        icon: InsightIcon,
         title: "Insight",
         description:
           "APIs to retrieve blockchain data from any EVM chain, enrich it with metadata, and transform it using custom logic.",
-
-        actions: {
-          primary: {
-            label: "Documentation",
-            href: "https://portal.thirdweb.com/insight",
-            external: true,
-          },
-          secondary: {
-            label: "Playground",
-            href: "https://playground.thirdweb.com/insight",
-            external: true,
-          },
-        },
+        actions: null,
         links: [
           {
             type: "docs",
             href: "https://portal.thirdweb.com/insight",
-          },
-          {
-            type: "playground",
-            href: "https://playground.thirdweb.com/insight",
           },
           {
             type: "api",
@@ -83,44 +69,6 @@ export default async function Page(props: {
             href: `/team/${params.team_slug}/${params.project_slug}/webhooks/contracts`,
           },
         ],
-      }}
-      footer={{
-        center: {
-          links: [
-            {
-              href: "https://www.youtube.com/watch?v=U2aW7YIUJVw",
-              label:
-                "Blockchain Data on Any EVM - Quick and Easy REST APIs for Onchain Data",
-            },
-            {
-              href: "https://www.youtube.com/watch?v=HvqewXLVRig",
-              label: "Build a Whale Alerts Telegram Bot with Insight",
-            },
-          ],
-          title: "Tutorials",
-        },
-        left: {
-          links: [
-            {
-              href: "https://portal.thirdweb.com/insight",
-              label: "Overview",
-            },
-            {
-              href: "https://insight-api.thirdweb.com/reference",
-              label: "API Reference",
-            },
-          ],
-          title: "Documentation",
-        },
-        right: {
-          links: [
-            {
-              href: "https://playground.thirdweb.com/insight",
-              label: "API Playground",
-            },
-          ],
-          title: "Demos",
-        },
       }}
     >
       <ResponsiveSearchParamsProvider value={searchParams}>

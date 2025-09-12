@@ -29,117 +29,17 @@ import {
 } from "@/components/ui/dialog";
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
 import { Img } from "../../../components/ui/Img";
-import { Spinner } from "../../../components/ui/Spinner/Spinner";
+import { Spinner } from "../../../components/ui/Spinner";
 import { THIRDWEB_CLIENT } from "../../../lib/client";
-import { type NebulaContext, promptNebula } from "../api/chat";
-import type { NebulaUserMessage } from "../api/types";
+import { promptNebula } from "../api/chat";
+import type {
+  ChatMessage,
+  NebulaContext,
+  NebulaUserMessage,
+  WalletMeta,
+} from "../api/types";
 import { examplePrompts } from "../data/examplePrompts";
 import { resolveSchemeWithErrorHandler } from "./resolveSchemeWithErrorHandler";
-
-// Simplified types for the playground version
-type WalletMeta = {
-  walletId: string;
-  address: string;
-};
-
-type NebulaUserMessageContentItem =
-  | {
-      type: "image";
-      image_url: string | null;
-      b64: string | null;
-    }
-  | {
-      type: "text";
-      text: string;
-    }
-  | {
-      type: "transaction";
-      transaction_hash: string;
-      chain_id: number;
-    };
-
-type NebulaUserMessageContent = NebulaUserMessageContentItem[];
-
-type ChatMessage =
-  | {
-      type: "user";
-      content: NebulaUserMessageContent;
-    }
-  | {
-      text: string;
-      type: "error";
-    }
-  | {
-      texts: string[];
-      type: "presence";
-    }
-  | {
-      // assistant type message loaded from history doesn't have request_id
-      request_id: string | undefined;
-      text: string;
-      type: "assistant";
-    }
-  | {
-      type: "action";
-      subtype: "sign_transaction";
-      request_id: string;
-      data: NebulaTxData;
-    }
-  | {
-      type: "action";
-      subtype: "sign_swap";
-      request_id: string;
-      data: NebulaSwapData;
-    }
-  | {
-      type: "image";
-      request_id: string;
-      data: {
-        width: number;
-        height: number;
-        url: string;
-      };
-    };
-
-type NebulaTxData = {
-  chainId: number;
-  data: `0x${string}`;
-  to: string;
-  value?: string;
-};
-
-type NebulaSwapData = {
-  action: string;
-  transaction: {
-    chainId: number;
-    to: `0x${string}`;
-    data: `0x${string}`;
-    value?: string;
-  };
-  to: {
-    address: `0x${string}`;
-    amount: string;
-    chain_id: number;
-    decimals: number;
-    symbol: string;
-  };
-  from: {
-    address: `0x${string}`;
-    amount: string;
-    chain_id: number;
-    decimals: number;
-    symbol: string;
-  };
-  intent: {
-    amount: string;
-    destinationChainId: number;
-    destinationTokenAddress: `0x${string}`;
-    originChainId: number;
-    originTokenAddress: `0x${string}`;
-    receiver: `0x${string}`;
-    sender: `0x${string}`;
-  };
-};
 
 export function ChatPageContent(props: {
   client: ThirdwebClient;
@@ -149,6 +49,18 @@ export function ChatPageContent(props: {
   const connectionStatus = useActiveWalletConnectionStatus();
   const connectedWallets = useConnectedWallets();
   const setActiveWallet = useSetActiveWallet();
+  const [chatAbortController, setChatAbortController] = useState<
+    AbortController | undefined
+  >();
+
+  const [isChatStreaming, setIsChatStreaming] = useState(false);
+  const [enableAutoScroll, setEnableAutoScroll] = useState(false);
+  const [showConnectModal, setShowConnectModal] = useState(false);
+
+  // User-configurable context options
+  const [userWalletAddress, setUserWalletAddress] = useState("");
+  const [userChainIds, setUserChainIds] = useState("");
+  const [userAutoExecute, setUserAutoExecute] = useState(false);
 
   const [userHasSubmittedMessage, setUserHasSubmittedMessage] = useState(false);
   const [messages, setMessages] = useState<Array<ChatMessage>>(() => {
@@ -168,12 +80,32 @@ export function ChatPageContent(props: {
   });
 
   const contextFilters = useMemo(() => {
+    // Parse user-entered chain IDs
+    const userChainIdArray = userChainIds
+      .split(",")
+      .map((id) => id.trim())
+      .filter((id) => id !== "" && !isNaN(Number(id)));
+
     return {
-      chainIds: _contextFilters?.chainIds || [],
+      chainIds:
+        userChainIdArray.length > 0
+          ? userChainIdArray
+          : _contextFilters?.chainIds || [],
       sessionId: _contextFilters?.sessionId || null,
-      walletAddress: address || _contextFilters?.walletAddress || null,
+      walletAddress:
+        userWalletAddress.trim() ||
+        address ||
+        _contextFilters?.walletAddress ||
+        null,
+      autoExecuteTransactions: userAutoExecute,
     } satisfies NebulaContext;
-  }, [_contextFilters, address]);
+  }, [
+    _contextFilters,
+    address,
+    userWalletAddress,
+    userChainIds,
+    userAutoExecute,
+  ]);
 
   const setContextFilters = useCallback((v: NebulaContext | undefined) => {
     _setContextFilters(v);
@@ -206,14 +138,6 @@ export function ChatPageContent(props: {
       return _contextFilters;
     });
   }, []);
-
-  const [chatAbortController, setChatAbortController] = useState<
-    AbortController | undefined
-  >();
-
-  const [isChatStreaming, setIsChatStreaming] = useState(false);
-  const [enableAutoScroll, setEnableAutoScroll] = useState(false);
-  const [showConnectModal, setShowConnectModal] = useState(false);
 
   const handleSendMessage = useCallback(
     async (message: NebulaUserMessage) => {
@@ -327,6 +251,14 @@ export function ChatPageContent(props: {
           {/* Chat input - anchored at bottom (same as chat state) */}
           <div className="flex-shrink-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container max-w-[800px] py-4">
+              <ContextOptionsBar
+                walletAddress={userWalletAddress}
+                chainIds={userChainIds}
+                autoExecute={userAutoExecute}
+                onWalletAddressChange={setUserWalletAddress}
+                onChainIdsChange={setUserChainIds}
+                onAutoExecuteChange={setUserAutoExecute}
+              />
               <SimpleChatBar
                 abortChatStream={() => {
                   chatAbortController?.abort();
@@ -379,6 +311,14 @@ export function ChatPageContent(props: {
           {/* Chat input - anchored at bottom */}
           <div className="flex-shrink-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container max-w-[800px] py-4">
+              <ContextOptionsBar
+                walletAddress={userWalletAddress}
+                chainIds={userChainIds}
+                autoExecute={userAutoExecute}
+                onWalletAddressChange={setUserWalletAddress}
+                onChainIdsChange={setUserChainIds}
+                onAutoExecuteChange={setUserAutoExecute}
+              />
               <SimpleChatBar
                 abortChatStream={() => {
                   chatAbortController?.abort();
@@ -703,7 +643,7 @@ function RenderMessage(props: {
                       transaction={() =>
                         prepareTransaction({
                           client: THIRDWEB_CLIENT,
-                          chain: defineChain(message.data.chainId),
+                          chain: defineChain(message.data.chain_id),
                           data: message.data.data,
                           to: message.data.to,
                           value: message.data.value
@@ -719,7 +659,7 @@ function RenderMessage(props: {
                         props.sendMessage({
                           content: [
                             {
-                              chain_id: message.data.chainId,
+                              chain_id: message.data.chain_id,
                               transaction_hash: tx.transactionHash,
                               type: "transaction",
                             },
@@ -734,7 +674,7 @@ function RenderMessage(props: {
                 ) : (
                   <ConnectButton
                     client={THIRDWEB_CLIENT}
-                    chain={defineChain(message.data.chainId)}
+                    chain={defineChain(message.data.chain_id)}
                   />
                 )}
               </div>
@@ -752,7 +692,7 @@ function RenderMessage(props: {
                     transaction={() =>
                       prepareTransaction({
                         client: THIRDWEB_CLIENT,
-                        chain: defineChain(message.data.transaction.chainId),
+                        chain: defineChain(message.data.transaction.chain_id),
                         data: message.data.transaction.data,
                         to: message.data.transaction.to,
                         value: message.data.transaction.value
@@ -768,7 +708,7 @@ function RenderMessage(props: {
                       props.sendMessage({
                         content: [
                           {
-                            chain_id: message.data.transaction.chainId,
+                            chain_id: message.data.transaction.chain_id,
                             transaction_hash: tx.transactionHash,
                             type: "transaction",
                           },
@@ -785,7 +725,7 @@ function RenderMessage(props: {
               ) : (
                 <ConnectButton
                   client={THIRDWEB_CLIENT}
-                  chain={defineChain(message.data.transaction.chainId)}
+                  chain={defineChain(message.data.transaction.chain_id)}
                 />
               )}
             </div>
@@ -802,6 +742,73 @@ function RenderMessage(props: {
               {message.text}
             </div>
           )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContextOptionsBar(props: {
+  walletAddress: string;
+  chainIds: string;
+  autoExecute: boolean;
+  onWalletAddressChange: (value: string) => void;
+  onChainIdsChange: (value: string) => void;
+  onAutoExecuteChange: (value: boolean) => void;
+}) {
+  return (
+    <div className="mb-4 rounded-lg border bg-card p-3">
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+          <label
+            htmlFor="wallet-address"
+            className="text-sm font-medium text-muted-foreground"
+          >
+            Wallet Address:
+          </label>
+          <input
+            id="wallet-address"
+            type="text"
+            value={props.walletAddress}
+            onChange={(e) => props.onWalletAddressChange(e.target.value)}
+            placeholder="0x..."
+            className="px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring bg-background"
+            style={{ width: "200px" }}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <label
+            htmlFor="chain-ids"
+            className="text-sm font-medium text-muted-foreground"
+          >
+            Chain IDs:
+          </label>
+          <input
+            id="chain-ids"
+            type="text"
+            value={props.chainIds}
+            onChange={(e) => props.onChainIdsChange(e.target.value)}
+            placeholder="1, 8453"
+            className="px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring bg-background"
+            style={{ width: "100px" }}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <input
+            id="auto-execute"
+            type="checkbox"
+            checked={props.autoExecute}
+            onChange={(e) => props.onAutoExecuteChange(e.target.checked)}
+            className="w-4 h-4 text-primary border-border rounded focus:ring-ring"
+          />
+          <label
+            htmlFor="auto-execute"
+            className="text-sm font-medium text-muted-foreground"
+          >
+            Auto Execute Transactions
+          </label>
         </div>
       </div>
     </div>

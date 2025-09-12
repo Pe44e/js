@@ -48,7 +48,7 @@ import {
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Spinner } from "@/components/ui/Spinner/Spinner";
+import { Spinner } from "@/components/ui/Spinner";
 import {
   Select,
   SelectContent,
@@ -539,7 +539,12 @@ function AllowedDomainsSetting(props: {
 
   return (
     <SettingsCard
-      bottomText="This is only applicable for web applications"
+      bottomText={
+        <>
+          This is only applicable for web applications. Changes to domain
+          restrictions may take up to 5 minutes to take effect
+        </>
+      }
       errorText={form.getFieldState("domains", form.formState).error?.message}
       header={{
         description:

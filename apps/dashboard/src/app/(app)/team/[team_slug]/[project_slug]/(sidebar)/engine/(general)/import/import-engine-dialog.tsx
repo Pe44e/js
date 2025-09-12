@@ -3,10 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import {
+  ArrowDownToLineIcon,
   CircleAlertIcon,
-  DownloadIcon,
   ExternalLinkIcon,
-  ImportIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -32,7 +31,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/Spinner/Spinner";
+import { Spinner } from "@/components/ui/Spinner";
 import { useDashboardRouter } from "@/lib/DashboardRouter";
 
 const formSchema = z.object({
@@ -107,8 +106,12 @@ export function ImportEngineButton(props: {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="gap-1.5 rounded-full" variant="outline">
-              <ImportIcon className="size-4" />
+            <Button
+              className="gap-2 rounded-full bg-card"
+              size="sm"
+              variant="outline"
+            >
+              <ArrowDownToLineIcon className="size-3.5" />
               Import Engine
             </Button>
           </DialogTrigger>
@@ -184,7 +187,7 @@ export function ImportEngineButton(props: {
                 {importMutation.isPending ? (
                   <Spinner className="size-4" />
                 ) : (
-                  <DownloadIcon className="size-4" />
+                  <ArrowDownToLineIcon className="size-4" />
                 )}
                 Import
               </Button>

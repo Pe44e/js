@@ -1,8 +1,10 @@
+import { cookies } from "next/headers";
 import type { ThirdwebContract } from "thirdweb";
 import type { ChainMetadata } from "thirdweb/chains";
 import { getContractMetadata } from "thirdweb/extensions/common";
 import { decimals, getActiveClaimCondition } from "thirdweb/extensions/erc20";
 import { GridPattern } from "@/components/ui/background-patterns";
+import { HAS_USED_DASHBOARD } from "@/constants/cookie";
 import { resolveFunctionSelectors } from "@/lib/selectors";
 import { AssetPageView } from "../_components/asset-page-view";
 import { getContractCreator } from "../_components/getContractCreator";
@@ -26,7 +28,7 @@ export async function ERC20PublicPage(props: {
     contractMetadata,
     activeClaimCondition,
     tokenDecimals,
-    tokenInfo,
+    tokenInfoFromUB,
     functionSelectors,
     tokenPriceData,
   ] = await Promise.all([
@@ -49,8 +51,8 @@ export async function ERC20PublicPage(props: {
     }),
   ]);
 
-  if (!contractMetadata.image && tokenInfo) {
-    contractMetadata.image = tokenInfo.iconUri;
+  if (!contractMetadata.image && tokenInfoFromUB) {
+    contractMetadata.image = tokenInfoFromUB.iconUri;
   }
 
   const [contractCreator, claimConditionCurrencyMeta] = await Promise.all([
@@ -65,24 +67,18 @@ export async function ERC20PublicPage(props: {
       : undefined,
   ]);
 
-  const buyEmbed = (
-    <BuyEmbed
-      chainMetadata={props.chainMetadata}
-      claimConditionMeta={
-        activeClaimCondition && claimConditionCurrencyMeta
-          ? {
-              activeClaimCondition,
-              claimConditionCurrency: claimConditionCurrencyMeta,
-            }
-          : undefined
-      }
-      clientContract={props.clientContract}
-      tokenAddress={props.clientContract.address}
-      tokenDecimals={tokenDecimals}
-      tokenName={contractMetadata.name}
-      tokenSymbol={contractMetadata.symbol}
-    />
-  );
+  const cookieStore = await cookies();
+  const isDashboardUser = cookieStore.has(HAS_USED_DASHBOARD);
+
+  const claimConditionMeta =
+    activeClaimCondition && claimConditionCurrencyMeta
+      ? {
+          activeClaimCondition,
+          claimConditionCurrency: claimConditionCurrencyMeta,
+        }
+      : undefined;
+  const isUBSupported = !!tokenInfoFromUB;
+  const showBuyEmbed = isUBSupported || claimConditionMeta;
 
   return (
     <div className="flex grow flex-col">
@@ -96,6 +92,7 @@ export async function ERC20PublicPage(props: {
             clientContract={props.clientContract}
             contractCreator={contractCreator}
             image={contractMetadata.image}
+            isDashboardUser={isDashboardUser}
             name={contractMetadata.name}
             socialUrls={
               typeof contractMetadata.social_urls === "object" &&
@@ -110,21 +107,33 @@ export async function ERC20PublicPage(props: {
 
       <div className="container flex max-w-5xl grow flex-col pt-8 pb-10">
         <div className="flex grow flex-col gap-8">
-          <div className="sm:flex sm:justify-center w-full sm:border sm:border-dashed sm:bg-accent/20 sm:py-12 rounded-lg overflow-hidden relative">
-            <GridPattern
-              width={30}
-              height={30}
-              x={-1}
-              y={-1}
-              strokeDasharray={"4 2"}
-              className="text-border dark:text-border/70"
-              style={{
-                maskImage:
-                  "linear-gradient(to bottom right,white,transparent,transparent)",
-              }}
-            />
-            <div className="sm:w-[420px] z-10">{buyEmbed}</div>
-          </div>
+          {showBuyEmbed && (
+            <div className="sm:flex sm:justify-center w-full sm:border sm:border-dashed sm:bg-accent/20 sm:py-12 rounded-lg overflow-hidden relative">
+              <GridPattern
+                width={30}
+                height={30}
+                x={-1}
+                y={-1}
+                strokeDasharray={"4 2"}
+                className="text-border dark:text-border/70"
+                style={{
+                  maskImage:
+                    "linear-gradient(to bottom right,white,transparent,transparent)",
+                }}
+              />
+              <div className="sm:w-[420px] z-10">
+                <BuyEmbed
+                  chainMetadata={props.chainMetadata}
+                  claimConditionMeta={claimConditionMeta}
+                  clientContract={props.clientContract}
+                  tokenAddress={props.clientContract.address}
+                  tokenDecimals={tokenDecimals}
+                  tokenName={contractMetadata.name}
+                  tokenSymbol={contractMetadata.symbol}
+                />
+              </div>
+            </div>
+          )}
 
           {tokenPriceData ? (
             <>

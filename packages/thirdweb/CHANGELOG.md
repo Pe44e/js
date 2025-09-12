@@ -1,5 +1,66 @@
 # thirdweb
 
+## 5.105.45
+
+### Patch Changes
+
+- [#8038](https://github.com/thirdweb-dev/js/pull/8038) [`0b45405`](https://github.com/thirdweb-dev/js/commit/0b454050b14806c103ea446e3667d0c970739912) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Accept pre signed authorizations for 7702 account transactions
+
+- [#8039](https://github.com/thirdweb-dev/js/pull/8039) [`dc1f7ab`](https://github.com/thirdweb-dev/js/commit/dc1f7ab2ee820be512776a413f7de362ff6b98ef) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Support fully disconnecting from metamask on disconnect
+
+- [#8042](https://github.com/thirdweb-dev/js/pull/8042) [`ea80610`](https://github.com/thirdweb-dev/js/commit/ea8061048adddb9fb7648f29ce1f3041f250ddfb) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Fix signAuthorization implementation for 1193 provider
+
+- [#8041](https://github.com/thirdweb-dev/js/pull/8041) [`3ad9f7d`](https://github.com/thirdweb-dev/js/commit/3ad9f7deba850b0a50e355111af11fd419db2efd) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Allow passing overrides to common extension functions
+
+## 5.105.44
+
+### Patch Changes
+
+- [#8036](https://github.com/thirdweb-dev/js/pull/8036) [`ef15ba7`](https://github.com/thirdweb-dev/js/commit/ef15ba7c434f8c9bde3b6d45d43d90e74f20616b) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - pass through authorizationList for injected providers
+
+## 5.105.43
+
+### Patch Changes
+
+- [#8029](https://github.com/thirdweb-dev/js/pull/8029) [`1759112`](https://github.com/thirdweb-dev/js/commit/1759112d722e11d2d9a902f2221e70636188015e) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Add signAuthorization support to 1193 provider
+
+## 5.105.42
+
+### Patch Changes
+
+- [#7973](https://github.com/thirdweb-dev/js/pull/7973) [`b149019`](https://github.com/thirdweb-dev/js/commit/b149019318a3a9f73aab96b68a92daef41a961e2) Thanks [@shubham-yuga](https://github.com/shubham-yuga)! - Added Glyph wallet to supported wallets
+
+- [#8007](https://github.com/thirdweb-dev/js/pull/8007) [`4ff1cf7`](https://github.com/thirdweb-dev/js/commit/4ff1cf79794af0c2e52f4beacbcf0d5d69266365) Thanks [@nischitpra](https://github.com/nischitpra)! - Polygon amoy gasstation url fix
+  https://github.com/thirdweb-dev/js/pull/8004
+
+## 5.105.41
+
+### Patch Changes
+
+- [#7966](https://github.com/thirdweb-dev/js/pull/7966) [`af6a306`](https://github.com/thirdweb-dev/js/commit/af6a306955aaf6a76fc22e3f8fd4e78854680d9c) Thanks [@gregfromstl](https://github.com/gregfromstl)! - Adds `country` code option to payment widgets
+
+## 5.105.40
+
+### Patch Changes
+
+- [#7946](https://github.com/thirdweb-dev/js/pull/7946) [`597431e`](https://github.com/thirdweb-dev/js/commit/597431ec1dc7b6a8b52b6676256e77d96b9a16b1) Thanks [@MananTank](https://github.com/MananTank)! - Add Pay Modal integration in `useSendAndConfirmTransaction` hook similar to `useSendTransaction` hook
+
+## 5.105.39
+
+### Patch Changes
+
+- [#7942](https://github.com/thirdweb-dev/js/pull/7942) [`50c6371`](https://github.com/thirdweb-dev/js/commit/50c6371e1ec12e296839987a6c25d9814dea2208) Thanks [@gregfromstl](https://github.com/gregfromstl)! - Adds the ability to exclude prices from Bridge.tokens
+
+## 5.105.38
+
+### Patch Changes
+
+- [#7936](https://github.com/thirdweb-dev/js/pull/7936) [`76cfecb`](https://github.com/thirdweb-dev/js/commit/76cfecb3054c03d952980a38842607300824a3bd) Thanks [@gregfromstl](https://github.com/gregfromstl)! - Updates copy on the payment widgets
+
+- [#7937](https://github.com/thirdweb-dev/js/pull/7937) [`44e6e11`](https://github.com/thirdweb-dev/js/commit/44e6e115d9519dd75ae9efa20c8be069fee067ea) Thanks [@gregfromstl](https://github.com/gregfromstl)! - Allows using the checkout widget without a wallet connected
+
+- [#7922](https://github.com/thirdweb-dev/js/pull/7922) [`f3ad6ef`](https://github.com/thirdweb-dev/js/commit/f3ad6efcf829e23435c4e2859809a74be877809d) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Handle already connected wallets in 1193 provider
+
 ## 5.105.37
 
 ### Patch Changes
