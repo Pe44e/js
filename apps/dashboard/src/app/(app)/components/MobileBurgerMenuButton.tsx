@@ -57,7 +57,6 @@ export function MobileBurgerMenuButton(
     // Report feedback to PostHog
     reportProductFeedback({
       feedback: modalFeedback,
-      feedbackLength: modalFeedback.trim().length,
       source: "mobile",
     });
 

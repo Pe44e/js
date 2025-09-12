@@ -46,7 +46,6 @@ export function SecondaryNavLinks() {
     // Report feedback to PostHog
     reportProductFeedback({
       feedback: modalFeedback,
-      feedbackLength: modalFeedback.trim().length,
       source: "desktop",
     });
 

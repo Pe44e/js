@@ -564,12 +564,10 @@ export function reportChainInfraRpcOmissionAgreed(properties: {
  */
 export function reportProductFeedback(properties: {
   feedback: string;
-  feedbackLength: number;
   source: "desktop" | "mobile";
 }) {
   posthog.capture("product feedback submitted", {
     feedback: properties.feedback,
-    feedbackLength: properties.feedbackLength,
     source: properties.source,
   });
 }
