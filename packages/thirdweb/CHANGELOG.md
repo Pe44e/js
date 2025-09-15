@@ -1,5 +1,17 @@
 # thirdweb
 
+## 5.105.47
+
+### Patch Changes
+
+- [#8048](https://github.com/thirdweb-dev/js/pull/8048) [`97e5080`](https://github.com/thirdweb-dev/js/commit/97e5080fdfd5b8b1106141012bdee2db2d27ae4c) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Fix fiat payments with no wallets connected
+
+## 5.105.46
+
+### Patch Changes
+
+- [#8046](https://github.com/thirdweb-dev/js/pull/8046) [`224c9d0`](https://github.com/thirdweb-dev/js/commit/224c9d034f274c3e6cf510d3508856fc36501c63) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Improve WalletConnect chain switching reliability
+
 ## 5.105.45
 
 ### Patch Changes
