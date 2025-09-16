@@ -1,5 +1,11 @@
 # thirdweb
 
+## 5.105.49
+
+### Patch Changes
+
+- [#8062](https://github.com/thirdweb-dev/js/pull/8062) [`f276dcf`](https://github.com/thirdweb-dev/js/commit/f276dcfd766c79149c5302b0207777bcc9f267a0) Thanks [@joaquim-verges](https://github.com/joaquim-verges)! - Filter out AGW from searchable wallets (needs explicit adding)
+
 ## 5.105.48
 
 ### Patch Changes
